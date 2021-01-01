@@ -1,0 +1,149 @@
+<html>
+
+<head>
+<link rel='stylesheet' type='text/css' href='style.css'/>
+<script src='jquery.min.js'></script>
+<script>
+
+function calculatetotal(myparent){
+
+	var price=myparent.find('.price').val();
+	var qty=myparent.find('.qty').val();
+	if(price && qty){
+		var total=price*qty;
+	}else{
+		var total=0;
+	}		
+	myparent.find('.total').val(total);
+
+
+	var finaltotal=0;
+	$('.total').each(function(){
+		var total_val=$(this).val();
+		if(total_val){			
+			/*finaltotal=finaltotal+total_val;*/
+			finaltotal+=parseFloat(total_val);
+		}	
+	});
+	$('.finaltotal').val(finaltotal);
+}
+
+
+
+
+$(document).ready(function(){
+	$('input').keyup(function(){
+		var myparent=$(this).parent().parent();				
+		calculatetotal(myparent);
+	});
+	
+	$('select').change(function(){
+		var myparent=$(this).parent().parent();				
+		calculatetotal(myparent);
+	});
+
+
+	$('#add_new').click(function(event){
+		event.preventDefault();	
+		$( ".container .mycolumn .row:first" ).clone().appendTo( ".mycolumn" );
+		$( ".container .mycolumn .row:last input").val('');
+		$('input').keyup(function(){
+			var myparent=$(this).parent().parent();				
+			calculatetotal(myparent);
+		});
+		
+		$('select').change(function(){
+			var myparent=$(this).parent().parent();				
+			calculatetotal(myparent);
+		});
+		
+		$('.remove_row').click(function(){
+			$(this).parents('.row').remove();			
+		});
+			
+	});
+	
+	
+	$('.print').click(function(){	
+		if(checktotals()){
+			window.print();
+		}	
+		
+	});
+	function checktotals(){	
+	
+		if(!$('.finaltotal').val()){
+			alert("Final Total Cannot be Empty");	return false;	
+		}else if($('.finaltotal').val()=='NaN'){
+			alert("Final Total Cannot be NaN");	return false;	
+		}else if($('.finaltotal').val()<=0){
+			alert("Final Total Should be Greater than 0.");	return false;	
+		}else{
+			return true;
+		}
+	}
+	
+});
+
+</script>
+</head>
+
+<body>
+
+	<div class='container'>
+	
+		<a href='javascript:void(0)' id='add_new'> + Add New</a>
+
+
+		<div class='row'>		
+			<div class='col-lg'>Name</div>
+			<div class='col-lg'>Price</div>
+			<div class='col-lg'>Quantity</div>
+			<div class='col-lg'>Total</div>
+		</div>
+		
+		
+		<div class='mycolumn'>		
+			<div class='row'>		
+				<div class='col-lg'><input type='text' placeholder='Enter Name'></div>
+				<div class='col-lg'><input type='number' placeholder='Enter Price' class='price'></div>
+				<div class='col-lg'>
+					<select class='qty'>
+						<option>-Select Quantity-</option>
+						<option value='1'>1</option>
+						<option value='2'>2</option>
+						<option value='3'>3</option>
+						<option value='4'>4</option>
+						<option value='5'>5</option>
+						<option value='6'>6</option>
+						<option value='7'>7</option>
+						<option value='8'>8</option>
+						<option value='9'>9</option>
+					</select>
+				</div>
+				<div class='col-lg'><input type='text' placeholder='0' class='total' readonly></div>
+			</div>
+		</div>
+		
+		
+		<div class='row finalrow'>		
+			<div class='col-lg'></div>
+			<div class='col-lg'></div>
+			<div class='col-lg' style='text-align:right;'><strong>Final Total</strong></div>
+			<div class='col-lg'><input type='text' placeholder='0' class='finaltotal' readonly></div>
+		</div>
+		
+		<div class='row'>		
+			<div class='col-lg'></div>
+			<div class='col-lg'></div>
+			<div class='col-lg'></div>
+			<div class='col-lg'><input type='button' class='print' value='Print'></div>
+		</div>
+
+
+	</div>
+</body>
+
+
+
+</html>
